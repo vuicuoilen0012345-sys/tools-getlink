@@ -7,7 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f5f7fe 0%, #eef2fc 100%);
@@ -15,8 +20,16 @@
             padding: 2rem 1.5rem;
             color: #1a2c3e;
         }
-        .container { max-width: 1280px; margin: 0 auto; }
-        .hero { text-align: center; margin-bottom: 3rem; }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
         .hero h1 {
             font-size: 2.5rem;
             font-weight: 700;
@@ -24,8 +37,14 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -0.5px;
         }
-        .hero p { font-size: 1.1rem; color: #4a627a; margin-top: 0.75rem; }
+        .hero p {
+            font-size: 1.1rem;
+            color: #4a627a;
+            margin-top: 0.75rem;
+        }
+
         .tabs {
             display: flex;
             justify-content: center;
@@ -48,22 +67,37 @@
             align-items: center;
             gap: 10px;
         }
+        .tab-btn i {
+            font-size: 1.2rem;
+        }
         .tab-btn.active {
             background: #1e3c72;
             color: white;
             box-shadow: 0 8px 18px rgba(30,60,114,0.2);
         }
-        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
-        .tab-pane.active-pane { display: block; }
+        .tab-btn:not(.active):hover {
+            background: #e9edf4;
+            transform: translateY(-2px);
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-pane.active-pane {
+            display: block;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px);}
             to { opacity: 1; transform: translateY(0);}
         }
+
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
             gap: 1.8rem;
         }
+
         .card {
             background: rgba(255,255,255,0.9);
             backdrop-filter: blur(2px);
@@ -89,7 +123,11 @@
             margin-bottom: 1.2rem;
             color: #1e3c72;
         }
-        .card h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
         .card .desc {
             color: #5b6e8c;
             font-size: 0.9rem;
@@ -97,7 +135,9 @@
             border-left: 3px solid #cbdbe0;
             padding-left: 0.8rem;
         }
-        .input-group { margin-bottom: 1.2rem; }
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
         .input-group label {
             font-weight: 500;
             font-size: 0.85rem;
@@ -115,6 +155,7 @@
             font-size: 0.95rem;
             transition: all 0.2s;
             background: white;
+            font-family: 'Inter', monospace;
         }
         .input-group input:focus {
             outline: none;
@@ -137,7 +178,9 @@
             justify-content: center;
             gap: 8px;
         }
-        button.primary-btn:hover { background: #0f2b4f; }
+        button.primary-btn:hover {
+            background: #0f2b4f;
+        }
         .result-box {
             margin-top: 1.5rem;
             background: #f8fafd;
@@ -146,6 +189,7 @@
             border: 1px solid #e2e8f0;
             font-size: 0.9rem;
             word-break: break-all;
+            position: relative;
         }
         .result-content {
             display: flex;
@@ -169,14 +213,25 @@
             padding: 6px;
             border-radius: 40px;
         }
-        .copy-btn:hover { color: #1e3c72; background: #e2e8f0; }
-        .error-msg { color: #d1453b; font-size: 0.85rem; }
+        .copy-btn:hover {
+            color: #1e3c72;
+            background: #e2e8f0;
+        }
+        .error-msg {
+            color: #d1453b;
+            font-size: 0.85rem;
+        }
+        .loading {
+            color: #2c6e9e;
+            font-style: italic;
+        }
         footer {
             text-align: center;
             margin-top: 3rem;
             font-size: 0.8rem;
             color: #7c8ba0;
         }
+
         @media (max-width: 700px) {
             body { padding: 1.2rem; }
             .cards-grid { grid-template-columns: 1fr; }
@@ -246,16 +301,21 @@
 </div>
 
 <script>
-    // Điền URL Vercel của bạn vào đây (không có dấu / ở cuối)
-    const API_BASE = 'https://tools-getlink.vercel.app';
+    // QUAN TRỌNG: Để trống, tự động dùng domain hiện tại
+    const API_BASE = '';
 
-    async function postData(endpoint, data) {
-        const res = await fetch(`${API_BASE}${endpoint}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        return res.json();
+    async function postData(url, data) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return { success: false, message: 'Lỗi kết nối đến server.' };
+        }
     }
 
     function showResult(containerId, text, isError = false) {
@@ -270,6 +330,7 @@
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
         copyBtn.innerHTML = '<i class="far fa-copy"></i>';
+        copyBtn.title = 'Sao chép';
         copyBtn.onclick = () => {
             navigator.clipboard.writeText(text);
             copyBtn.innerHTML = '<i class="fas fa-check"></i>';
@@ -302,48 +363,69 @@
         }
     }
 
-    // UID từ link
     document.getElementById('btnLinkUid').addEventListener('click', async () => {
         const link = document.getElementById('fbLinkInput').value.trim();
-        if (!link) { showResult('fbLinkResult', 'Vui lòng nhập link Facebook', true); return; }
+        const resultDiv = 'fbLinkResult';
+        if (!link) { showResult(resultDiv, 'Vui lòng nhập link Facebook', true); return; }
         setLoading('btnLinkUid', true);
         try {
-            const data = await postData('/get-uid-from-link', { link });
-            if (data.status === 1 && data.msg) showResult('fbLinkResult', `UID: ${data.msg}`, false);
-            else showResult('fbLinkResult', data.msg || 'Không lấy được UID', true);
-        } catch (err) { showResult('fbLinkResult', 'Lỗi kết nối đến server', true); }
-        finally { setLoading('btnLinkUid', false); }
+            const data = await postData(`${API_BASE}/get-uid-from-link`, { link });
+            if (data.status === 1 && data.msg) {
+                showResult(resultDiv, `UID: ${data.msg}`, false);
+            } else {
+                showResult(resultDiv, data.msg || 'Không lấy được UID', true);
+            }
+        } catch (err) {
+            showResult(resultDiv, 'Lỗi kết nối đến server', true);
+        } finally {
+            setLoading('btnLinkUid', false);
+        }
     });
 
-    // UID từ username
     document.getElementById('btnUsernameUid').addEventListener('click', async () => {
         const username = document.getElementById('fbUsernameInput').value.trim();
-        if (!username) { showResult('fbUsernameResult', 'Vui lòng nhập username', true); return; }
+        const resultDiv = 'fbUsernameResult';
+        if (!username) { showResult(resultDiv, 'Vui lòng nhập username', true); return; }
         setLoading('btnUsernameUid', true);
         try {
-            const data = await postData('/get-uid-from-username', { username });
-            if (data.status === 1 && data.data) showResult('fbUsernameResult', `UID: ${data.data.id}\nTên: ${data.data.name || ''}`, false);
-            else showResult('fbUsernameResult', data.msg || 'Không tìm thấy username', true);
-        } catch (err) { showResult('fbUsernameResult', 'Lỗi kết nối đến server', true); }
-        finally { setLoading('btnUsernameUid', false); }
+            const data = await postData(`${API_BASE}/get-uid-from-username`, { username });
+            if (data.status === 1 && data.data) {
+                showResult(resultDiv, `UID: ${data.data.id}\nTên: ${data.data.name || ''}`, false);
+            } else {
+                showResult(resultDiv, data.msg || 'Không tìm thấy username', true);
+            }
+        } catch (err) {
+            showResult(resultDiv, 'Lỗi kết nối đến server', true);
+        } finally {
+            setLoading('btnUsernameUid', false);
+        }
     });
 
-    // TikTok
     document.getElementById('btnTikTok').addEventListener('click', async () => {
         const link = document.getElementById('ttLinkInput').value.trim();
-        if (!link) { showResult('ttResult', 'Vui lòng nhập link TikTok rút gọn', true); return; }
+        const resultDiv = 'ttResult';
+        if (!link) { showResult(resultDiv, 'Vui lòng nhập link TikTok rút gọn', true); return; }
         setLoading('btnTikTok', true);
         try {
-            const data = await postData('/get-tiktok-original', { link });
-            if (data.status === 1 && data.msg) showResult('ttResult', data.msg, false);
-            else showResult('ttResult', data.msg || 'Không giải mã được link', true);
-        } catch (err) { showResult('ttResult', 'Lỗi kết nối đến server', true); }
-        finally { setLoading('btnTikTok', false); }
+            const data = await postData(`${API_BASE}/get-tiktok-original`, { link });
+            if (data.status === 1 && data.msg) {
+                showResult(resultDiv, data.msg, false);
+            } else {
+                showResult(resultDiv, data.msg || 'Không giải mã được link', true);
+            }
+        } catch (err) {
+            showResult(resultDiv, 'Lỗi kết nối đến server', true);
+        } finally {
+            setLoading('btnTikTok', false);
+        }
     });
 
     // Tab switching
     const tabs = document.querySelectorAll('.tab-btn');
-    const panes = { fb: document.getElementById('fb-tab'), tt: document.getElementById('tt-tab') };
+    const panes = {
+        fb: document.getElementById('fb-tab'),
+        tt: document.getElementById('tt-tab')
+    };
     tabs.forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.getAttribute('data-tab');

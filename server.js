@@ -5,12 +5,12 @@ const qs = require('qs');
 const path = require('path');
 
 const app = express();
-const TOKEN = process.env.TOKEN || '65102|kfRrIll31vnTOGBemtqyZsMYTnww52QKOUSpSBwsu49Lttx2';
+const TOKEN = process.env.TOKEN; // Lấy token từ biến môi trường Vercel
 
 app.use(cors());
 app.use(express.json());
 
-// API routes
+// 1. Lấy UID từ link Facebook
 app.post('/get-uid-from-link', async (req, res) => {
     const { link } = req.body;
     if (!link) return res.json({ success: false, message: 'Vui lòng nhập link Facebook.' });
@@ -25,6 +25,7 @@ app.post('/get-uid-from-link', async (req, res) => {
     }
 });
 
+// 2. Lấy UID từ username Facebook
 app.post('/get-uid-from-username', async (req, res) => {
     const { username } = req.body;
     if (!username) return res.json({ success: false, message: 'Vui lòng nhập username.' });
@@ -39,6 +40,7 @@ app.post('/get-uid-from-username', async (req, res) => {
     }
 });
 
+// 3. Lấy link gốc TikTok từ link rút gọn
 app.post('/get-tiktok-original', async (req, res) => {
     const { link } = req.body;
     if (!link) return res.json({ success: false, message: 'Vui lòng nhập link TikTok rút gọn.' });
@@ -53,13 +55,13 @@ app.post('/get-tiktok-original', async (req, res) => {
     }
 });
 
-// Phục vụ file tĩnh trong thư mục public
+// Phục vụ file tĩnh từ thư mục public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route gốc trả về index.html
+// Route mặc định trả về index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Export cho Vercel
+// Xuất app cho Vercel
 module.exports = app;
